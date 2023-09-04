@@ -60,7 +60,7 @@ const PersyaratanList = ({navigation}) => {
     setLoading(true);
     const token = JSON.parse(await AsyncStorage.getItem('token'));
     try {
-      const resp = await axios.get(`${apiUrl}/penumpang`, {
+      const resp = await axios.get(`${apiUrl}/penumpang/persyaratan`, {
         headers: {
           'x-auth-token': token,
         },
@@ -78,7 +78,6 @@ const PersyaratanList = ({navigation}) => {
           limit,
         },
       });
-      console.log(resp.config.url);
       setData(resp.data.data);
       setMeta(resp.headers);
       setLoading(false);
