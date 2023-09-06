@@ -60,7 +60,7 @@ const ListDataSantri = ({niup, nama, wilayah, rombongan}) => {
         <Text color={'muted.500'}>{wilayah}</Text>
         <Badge
           colorScheme={rombongan === 'rombongan' ? 'success' : 'danger'}
-          w={32}
+          w={48}
           mt={1}
           mb={2}>
           {rombongan.toUpperCase()}

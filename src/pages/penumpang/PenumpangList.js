@@ -265,7 +265,7 @@ const PenumpangList = ({navigation}) => {
         <Modal.Content>
           <Modal.CloseButton />
           <Modal.Header>Filter Penumpang</Modal.Header>
-          <Modal.Body>
+          <Modal.Content p={4} borderRadius={0} shadow={'none'}>
             {!isPendamping && (
               <>
                 <Select
@@ -372,7 +372,7 @@ const PenumpangList = ({navigation}) => {
                 return <Select.Item key={a.id} label={a.nama} value={a.id} />;
               })}
             </Select>
-          </Modal.Body>
+          </Modal.Content>
           <Modal.Footer>
             <Button.Group space={2}>
               <Button

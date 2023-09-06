@@ -19,6 +19,7 @@ import {
   UbahDropspot,
   ArmadaDetail,
   Development,
+  NFCScan,
 } from '../pages';
 
 const Stack = createNativeStackNavigator();
@@ -44,6 +45,7 @@ const Router = () => {
       <Stack.Screen name="ArmadaDetail" component={ArmadaDetail} />
       <Stack.Screen name="UserList" component={UserList} />
       <Stack.Screen name="QrCode" component={QrCode} />
+      <Stack.Screen name="NFCScan" component={NFCScan} />
       <Stack.Screen name="UbahPassword" component={UbahPassword} />
       <Stack.Screen name="Development" component={Development} />
     </Stack.Navigator>

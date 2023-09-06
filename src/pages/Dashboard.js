@@ -74,7 +74,7 @@ const Dashboard = ({navigation}) => {
   }, []);
 
   return (
-    <View backgroundColor={'white'} flex={1} alignItems={'center'}>
+    <View backgroundColor={'white'} flex={1}>
       <Box backgroundColor={'lime.900'} width={'100%'} alignItems={'center'}>
         <Image
           source={require('../assets/puber.png')}
@@ -117,7 +117,7 @@ const Dashboard = ({navigation}) => {
           </Text>
         </Box>
       </Box>
-      <HStack flexWrap={'wrap'} mt={4}>
+      <HStack flexWrap={'wrap'} mt={4} justifyContent={'center'} space={2}>
         {isInternal && (
           <Pressable
             w={20}
@@ -224,10 +224,7 @@ const Dashboard = ({navigation}) => {
             </Text>
           </Box>
         </Pressable>
-        <Pressable
-          w={20}
-          h={20}
-          onPress={() => navigation.navigate('Development')}>
+        <Pressable w={20} h={20} onPress={() => navigation.navigate('NFCScan')}>
           <Box alignItems={'center'}>
             <Icon name="nfc-symbol" size={32} color={'#f59e0b'} />
             <Text mt={2} color={'black'}>

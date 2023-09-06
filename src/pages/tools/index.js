@@ -1,3 +1,4 @@
+import NFCScan from './NFC';
 import QrCode from './QrCode';
 
-export {QrCode};
+export {QrCode, NFCScan};

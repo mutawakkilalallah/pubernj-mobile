@@ -226,7 +226,7 @@ const PersyaratanList = ({navigation}) => {
         <Modal.Content>
           <Modal.CloseButton />
           <Modal.Header>Filter Penumpang</Modal.Header>
-          <Modal.Body>
+          <Modal.Content p={4} borderRadius={0} shadow={'none'}>
             {/* <Select
               onValueChange={setArea}
               placeholder="Semua Area"
@@ -336,7 +336,7 @@ const PersyaratanList = ({navigation}) => {
               <Select.Item label="100" value="100" />
               <Select.Item label="250" value="250" />
             </Select>
-          </Modal.Body>
+          </Modal.Content>
           <Modal.Footer>
             <Button.Group space={2}>
               <Button

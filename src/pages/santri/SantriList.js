@@ -9,13 +9,16 @@ import {
   Modal,
   Select,
   Pressable,
+  Box,
+  VStack,
 } from 'native-base';
 import React, {useEffect, useState} from 'react';
-import {HeaderPage, ListDataFoto, ListDataSantri} from '../../components';
+import {HeaderPage, ListDataSantri} from '../../components';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {apiUrl} from '../../config';
 import {notifError} from '../../utils';
+import {SafeAreaView} from 'react-native';
 
 const SantriList = ({navigation}) => {
   const [loading, setLoading] = useState(false);
@@ -161,7 +164,7 @@ const SantriList = ({navigation}) => {
         <Modal.Content>
           <Modal.CloseButton />
           <Modal.Header>Filter Santri</Modal.Header>
-          <Modal.Body>
+          <Modal.Content p={4} borderRadius={0} shadow={'none'}>
             <Select
               onValueChange={setWilayah}
               placeholder="Semua Wilayah"
@@ -223,7 +226,7 @@ const SantriList = ({navigation}) => {
               <Select.Item label="100" value="100" />
               <Select.Item label="250" value="250" />
             </Select>
-          </Modal.Body>
+          </Modal.Content>
           <Modal.Footer>
             <Button.Group space={2}>
               <Button

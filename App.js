@@ -15,14 +15,14 @@ const MyStatusBar = ({backgroundColor, ...props}) => (
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <NativeBaseProvider>
+    <NativeBaseProvider>
+      <NavigationContainer>
         <MyStatusBar backgroundColor="#365314" barStyle="light-content" />
         {/* <StatusBar barStyle={'light-content'} backgroundColor={'#365314'} /> */}
         <FlashMessage position="top" />
         <Router />
-      </NativeBaseProvider>
-    </NavigationContainer>
+      </NavigationContainer>
+    </NativeBaseProvider>
   );
 };
 

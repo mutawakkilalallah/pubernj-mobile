@@ -68,7 +68,7 @@ const ListDataPenumpang = ({niup, nama, dropspot, pembayaran}) => {
               ? 'info'
               : 'danger'
           }
-          w={100}
+          w={48}
           mt={1}
           mb={2}>
           {pembayaran.toUpperCase()}
