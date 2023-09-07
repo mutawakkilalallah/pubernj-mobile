@@ -5,12 +5,12 @@ import {
   Divider,
   HStack,
   Input,
-  ScrollView,
   Spinner,
   Text,
   View,
   Modal,
   Select,
+  FlatList,
 } from 'native-base';
 import React, {useEffect, useState} from 'react';
 import {HeaderPage} from '../../components';
@@ -94,25 +94,24 @@ const UserList = ({navigation}) => {
       {loading ? (
         <Spinner color={'lime.900'} size={'lg'} mt={2} />
       ) : (
-        <ScrollView mx={4} showsVerticalScrollIndicator={false}>
-          {data.map(d => {
+        <FlatList
+          px={4}
+          data={data}
+          renderItem={({item}) => {
             return (
-              <Box
-                borderBottomWidth={1}
-                borderBottomColor={'muted.300'}
-                mt={2}
-                key={d.uuid}>
-                <Text fontWeight={'bold'}>{d?.nama_lengkap}</Text>
-                <Text color={'muted.500'}>{`@${d?.username}`}</Text>
+              <Box borderBottomWidth={1} borderBottomColor={'muted.300'} mt={2}>
+                <Text fontWeight={'bold'}>{item?.nama_lengkap}</Text>
+                <Text color={'muted.500'}>{`@${item?.username}`}</Text>
                 <Badge
                   colorScheme={'success'}
                   w={100}
                   mt={1}
-                  mb={2}>{`(${d?.role})`}</Badge>
+                  mb={2}>{`(${item?.role})`}</Badge>
               </Box>
             );
-          })}
-        </ScrollView>
+          }}
+          keyExtractor={item => item.uuid}
+        />
       )}
       <Modal isOpen={modalVisible} onClose={setModalVisible} size={'xl'}>
         <Modal.Content>

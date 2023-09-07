@@ -20,7 +20,9 @@ import {
   ArmadaDetail,
   Development,
   NFCScan,
+  TermOfServiceScreen,
 } from '../pages';
+import PrivacyPolicyScreen from '../pages/TOR';
 
 const Stack = createNativeStackNavigator();
 
@@ -48,6 +50,8 @@ const Router = () => {
       <Stack.Screen name="NFCScan" component={NFCScan} />
       <Stack.Screen name="UbahPassword" component={UbahPassword} />
       <Stack.Screen name="Development" component={Development} />
+      <Stack.Screen name="TOR" component={PrivacyPolicyScreen} />
+      <Stack.Screen name="SK" component={TermOfServiceScreen} />
     </Stack.Navigator>
   );
 };

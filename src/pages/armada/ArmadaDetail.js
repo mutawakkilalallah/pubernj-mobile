@@ -4,6 +4,7 @@ import {
   Badge,
   Box,
   Divider,
+  FlatList,
   HStack,
   Image,
   Pressable,
@@ -82,9 +83,7 @@ const ArmadaDetail = ({route, navigation}) => {
         navigation={navigation}
         link="ArmadaList"
       />
-      {loading ? (
-        <Spinner color={'lime.900'} size={'lg'} mt={2} />
-      ) : (
+      {!loading && (
         <Box>
           <Box p={2} backgroundColor={'white'} shadow={4}>
             <Text fontWeight={'bold'} fontSize={'md'} color={'muted.500'}>
@@ -144,29 +143,26 @@ const ArmadaDetail = ({route, navigation}) => {
             <Icon name="users" color={'#000'} size={16} />
             <Text ml={4}>DATA PENUMPANG ({data?.penumpang?.length})</Text>
           </HStack>
-          <ScrollView mx={4} showsVerticalScrollIndicator={false}>
-            {data.penumpang?.map(p => (
-              <Pressable
-                key={p.id}
-                onPress={() =>
-                  navigation.navigate({
-                    name: 'PenumpangDetail',
-                    params: {
-                      uuid: p?.santri?.uuid,
-                    },
-                  })
-                }>
-                <ListDataPenumpangArmada
-                  niup={p?.santri?.niup}
-                  nama={p?.santri?.nama_lengkap}
-                  wilayah={`${p?.santri?.wilayah}`}
-                  blok={`${p?.santri?.blok}`}
-                  keberangkatan={p?.status_keberangkatan}
-                />
-              </Pressable>
-            ))}
-          </ScrollView>
         </Box>
+      )}
+      {loading ? (
+        <Spinner color={'lime.900'} size={'lg'} mt={2} />
+      ) : (
+        <FlatList
+          px={4}
+          data={data?.penumpang}
+          renderItem={({item}) => (
+            <ListDataPenumpangArmada
+              id={item?.id}
+              niup={item?.santri?.niup}
+              nama={item?.santri?.nama_lengkap}
+              wilayah={`${item?.santri?.wilayah}`}
+              blok={`${item?.santri?.blok}`}
+              keberangkatan={item?.status_keberangkatan}
+            />
+          )}
+          keyExtractor={item => item.id}
+        />
       )}
     </View>
   );

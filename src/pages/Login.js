@@ -1,5 +1,15 @@
 import React, {useState} from 'react';
-import {View, Text, Image, Box, Input, Button} from 'native-base';
+import {
+  View,
+  Text,
+  Image,
+  Box,
+  Input,
+  Button,
+  Pressable,
+  HStack,
+  Divider,
+} from 'native-base';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {apiUrl} from '../config';
@@ -37,7 +47,7 @@ const Login = ({navigation}) => {
           opacity={0.4}
         />
       </Box>
-      <Box mt={32}>
+      <Box mt={8}>
         <Input
           placeholder="Username"
           width={80}
@@ -65,6 +75,45 @@ const Login = ({navigation}) => {
         NURUL JADID &copy; 2023
       </Text>
       <Text color={'muted.500'}>Mutawakkil Alallah</Text>
+      <Box
+        mt={4}
+        backgroundColor={'red.500'}
+        py={1}
+        px={16}
+        borderRadius={4}
+        alignItems={'center'}>
+        <Text color={'white'}>Beta v.1.05.23</Text>
+        <Text color={'white'} fontWeight={'black'}>
+          Non Official Release
+        </Text>
+        <Text color={'white'} fontStyle={'italic'}>
+          For development only
+        </Text>
+      </Box>
+      <Text
+        color={'muted.500'}
+        fontSize={12}
+        mt={8}
+        textAlign={'center'}
+        px={8}>
+        This application is only for internal use. Registration is only in
+        ofiice Pondok Pesantren Nurul Jadid
+      </Text>
+      <HStack mt={4}>
+        <Pressable onPress={() => navigation.navigate('TOR')}>
+          <Text underline color={'muted.500'} fontSize={12}>
+            Privacy Police
+          </Text>
+        </Pressable>
+        <Text color={'muted.500'} fontSize={12}>
+          &nbsp;&nbsp;|&nbsp;&nbsp;
+        </Text>
+        <Pressable onPress={() => navigation.navigate('SK')}>
+          <Text underline color={'muted.500'} fontSize={12}>
+            Term Of Service
+          </Text>
+        </Pressable>
+      </HStack>
     </View>
   );
 };

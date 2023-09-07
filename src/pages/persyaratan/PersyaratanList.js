@@ -9,6 +9,7 @@ import {
   Modal,
   Select,
   Pressable,
+  FlatList,
 } from 'native-base';
 import React, {useEffect, useState} from 'react';
 import {HeaderPage, ListDataPersyaratan} from '../../components';
@@ -194,33 +195,35 @@ const PersyaratanList = ({navigation}) => {
       {loading ? (
         <Spinner color={'lime.900'} size={'lg'} mt={2} />
       ) : (
-        <ScrollView mx={4} showsVerticalScrollIndicator={false}>
-          {data.map(d => {
+        <FlatList
+          px={4}
+          data={data}
+          renderItem={({item}) => {
             return (
               <Pressable
-                key={d.id}
                 onPress={() =>
                   navigation.navigate({
                     name: 'PenumpangDetail',
                     params: {
-                      uuid: d?.santri?.uuid,
-                      niup: d?.santri?.niup,
+                      uuid: item?.santri?.uuid,
+                      niup: item?.santri?.niup,
                     },
                   })
                 }>
                 <ListDataPersyaratan
-                  niup={d?.santri?.niup}
-                  nama={d?.santri?.nama_lengkap}
-                  blok={d?.santri?.blok}
-                  bps={d?.persyaratan?.lunas_bps}
-                  kosmara={d?.persyaratan?.lunas_kosmara}
-                  fa={d?.persyaratan?.tuntas_fa}
-                  kamtib={d?.persyaratan?.bebas_kamtib}
+                  niup={item?.santri?.niup}
+                  nama={item?.santri?.nama_lengkap}
+                  blok={item?.santri?.blok}
+                  bps={item?.persyaratan?.lunas_bps}
+                  kosmara={item?.persyaratan?.lunas_kosmara}
+                  fa={item?.persyaratan?.tuntas_fa}
+                  kamtib={item?.persyaratan?.bebas_kamtib}
                 />
               </Pressable>
             );
-          })}
-        </ScrollView>
+          }}
+          keyExtractor={item => item.id}
+        />
       )}
       <Modal isOpen={modalVisible} onClose={setModalVisible} size={'xl'}>
         <Modal.Content>

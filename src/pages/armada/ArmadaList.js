@@ -12,6 +12,7 @@ import {
   Modal,
   Select,
   Pressable,
+  FlatList,
 } from 'native-base';
 import React, {useEffect, useState} from 'react';
 import {HeaderPage} from '../../components';
@@ -163,41 +164,38 @@ const DropspotList = ({navigation}) => {
       {loading ? (
         <Spinner color={'lime.900'} size={'lg'} mt={2} />
       ) : (
-        <ScrollView mx={4} showsVerticalScrollIndicator={false}>
-          {data.map(d => {
-            return (
-              <Pressable
-                key={d.id}
-                onPress={() =>
-                  navigation.navigate({
-                    name: 'ArmadaDetail',
-                    params: {id: d.id, user: d.user},
-                  })
-                }>
-                <Box
-                  borderBottomWidth={1}
-                  borderBottomColor={'muted.300'}
-                  mt={2}>
-                  <Text fontWeight={'bold'}>{d?.nama}</Text>
-                  <Text color={'muted.500'}>{d?.dropspot?.area?.nama}</Text>
-                  <HStack>
-                    <Badge colorScheme={'success'} w={24} mt={1} mb={2}>
-                      {d?.type.toUpperCase()}
-                    </Badge>
-                    <Badge
-                      colorScheme={d.jenis === 'putra' ? 'info' : 'warning'}
-                      w={24}
-                      mt={1}
-                      mb={2}
-                      ml={2}>
-                      {d?.jenis.toUpperCase()}
-                    </Badge>
-                  </HStack>
-                </Box>
-              </Pressable>
-            );
-          })}
-        </ScrollView>
+        <FlatList
+          px={4}
+          data={data}
+          renderItem={({item}) => (
+            <Pressable
+              onPress={() =>
+                navigation.navigate({
+                  name: 'ArmadaDetail',
+                  params: {id: item?.id, user: item?.user},
+                })
+              }>
+              <Box borderBottomWidth={1} borderBottomColor={'muted.300'} mt={2}>
+                <Text fontWeight={'bold'}>{item?.nama}</Text>
+                <Text color={'muted.500'}>{item?.dropspot?.area?.nama}</Text>
+                <HStack>
+                  <Badge colorScheme={'success'} w={24} mt={1} mb={2}>
+                    {item?.type.toUpperCase()}
+                  </Badge>
+                  <Badge
+                    colorScheme={item?.jenis === 'putra' ? 'info' : 'warning'}
+                    w={24}
+                    mt={1}
+                    mb={2}
+                    ml={2}>
+                    {item?.jenis.toUpperCase()}
+                  </Badge>
+                </HStack>
+              </Box>
+            </Pressable>
+          )}
+          keyExtractor={item => item.id}
+        />
       )}
       <Modal isOpen={modalVisible} onClose={setModalVisible} size={'xl'}>
         <Modal.Content>

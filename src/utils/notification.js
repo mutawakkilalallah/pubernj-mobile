@@ -18,8 +18,9 @@ const notifError = async err => {
     // navigation.navigate('Login');
   } else {
     showMessage({
-      message: err?.response?.data?.message ?? err?.code,
-      description: err?.response?.data?.error ?? err.message,
+      message: err?.response?.data?.message ?? err?.code ?? 'Ops !',
+      description:
+        err?.response?.data?.error ?? err.message ?? 'Error tidak dikenal',
       type: 'danger',
       icon: 'danger',
       duration: 4000,

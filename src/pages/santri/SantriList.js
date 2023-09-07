@@ -11,6 +11,7 @@ import {
   Pressable,
   Box,
   VStack,
+  FlatList,
 } from 'native-base';
 import React, {useEffect, useState} from 'react';
 import {HeaderPage, ListDataSantri} from '../../components';
@@ -138,27 +139,27 @@ const SantriList = ({navigation}) => {
       {loading ? (
         <Spinner color={'lime.900'} size={'lg'} mt={2} />
       ) : (
-        <ScrollView mx={4} showsVerticalScrollIndicator={false}>
-          {data.map(d => {
-            return (
-              <Pressable
-                key={d.uuid}
-                onPress={() =>
-                  navigation.navigate({
-                    name: 'SantriDetail',
-                    params: {uuid: d.uuid, niup: d.niup},
-                  })
-                }>
-                <ListDataSantri
-                  niup={d.niup}
-                  nama={d.nama_lengkap}
-                  wilayah={d.wilayah}
-                  rombongan={d.status_kepulangan}
-                />
-              </Pressable>
-            );
-          })}
-        </ScrollView>
+        <FlatList
+          px={4}
+          data={data}
+          renderItem={({item}) => (
+            <Pressable
+              onPress={() =>
+                navigation.navigate({
+                  name: 'SantriDetail',
+                  params: {uuid: item?.uuid, niup: item?.niup},
+                })
+              }>
+              <ListDataSantri
+                niup={item?.niup}
+                nama={item?.nama_lengkap}
+                wilayah={item?.wilayah}
+                rombongan={item?.status_kepulangan}
+              />
+            </Pressable>
+          )}
+          keyExtractor={item => item.uuid}
+        />
       )}
       <Modal isOpen={modalVisible} onClose={setModalVisible} size={'xl'}>
         <Modal.Content>

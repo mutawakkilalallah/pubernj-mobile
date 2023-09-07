@@ -11,6 +11,7 @@ import {
   View,
   Modal,
   Select,
+  FlatList,
 } from 'native-base';
 import React, {useEffect, useState} from 'react';
 import {HeaderPage} from '../../components';
@@ -89,25 +90,22 @@ const DropspotList = ({navigation}) => {
       {loading ? (
         <Spinner color={'lime.900'} size={'lg'} mt={2} />
       ) : (
-        <ScrollView mx={4} showsVerticalScrollIndicator={false}>
-          {data.map(d => {
-            return (
-              <Box
-                borderBottomWidth={1}
-                borderBottomColor={'muted.300'}
-                mt={2}
-                key={d.id}>
-                <Text fontWeight={'bold'}>{d?.nama}</Text>
-                <Text color={'muted.500'}>{d?.pic}</Text>
-                <Badge
-                  colorScheme={'success'}
-                  w={32}
-                  mt={1}
-                  mb={2}>{`+62${d?.no_hp}`}</Badge>
-              </Box>
-            );
-          })}
-        </ScrollView>
+        <FlatList
+          px={4}
+          data={data}
+          renderItem={({item}) => (
+            <Box borderBottomWidth={1} borderBottomColor={'muted.300'} mt={2}>
+              <Text fontWeight={'bold'}>{item?.nama}</Text>
+              <Text color={'muted.500'}>{item?.pic}</Text>
+              <Badge
+                colorScheme={'success'}
+                w={32}
+                mt={1}
+                mb={2}>{`+62${item?.no_hp}`}</Badge>
+            </Box>
+          )}
+          keyExtractor={item => item.id}
+        />
       )}
       <Modal isOpen={modalVisible} onClose={setModalVisible} size={'xl'}>
         <Modal.Content>

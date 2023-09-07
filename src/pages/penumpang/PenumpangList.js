@@ -3,13 +3,12 @@ import {
   Divider,
   HStack,
   Input,
-  ScrollView,
   Spinner,
   View,
   Modal,
   Select,
   Pressable,
-  Box,
+  FlatList,
 } from 'native-base';
 import React, {useEffect, useState} from 'react';
 import {HeaderPage, ListDataPenumpang} from '../../components';
@@ -89,9 +88,9 @@ const PenumpangList = ({navigation}) => {
       if (user?.role === 'p4nj') {
         setFltArea(resp.data.filter.area);
       }
+      setLoading(false);
       setData(resp.data.data);
       setMeta(resp.headers);
-      setLoading(false);
     } catch (err) {
       setLoading(false);
       notifError(err);
@@ -237,29 +236,31 @@ const PenumpangList = ({navigation}) => {
       {loading ? (
         <Spinner color={'lime.900'} size={'lg'} mt={2} />
       ) : (
-        <ScrollView mx={4} showsVerticalScrollIndicator={false}>
-          {data.map(d => {
+        <FlatList
+          px={3}
+          data={data}
+          renderItem={({item}) => {
             return (
               <Pressable
-                key={d.id}
                 onPress={() =>
                   navigation.navigate({
                     name: 'PenumpangDetail',
                     params: {
-                      uuid: d?.santri?.uuid,
+                      uuid: item?.santri?.uuid,
                     },
                   })
                 }>
                 <ListDataPenumpang
-                  niup={d?.santri?.niup}
-                  nama={d?.santri?.nama_lengkap}
-                  dropspot={d?.dropspot?.nama}
-                  pembayaran={d?.status_bayar}
+                  niup={item?.santri?.niup}
+                  nama={item?.santri?.nama_lengkap}
+                  dropspot={item?.dropspot?.nama}
+                  pembayaran={item?.status_bayar}
                 />
               </Pressable>
             );
-          })}
-        </ScrollView>
+          }}
+          keyExtractor={item => item.id}
+        />
       )}
       <Modal isOpen={modalVisible} onClose={setModalVisible} size={'xl'}>
         <Modal.Content>

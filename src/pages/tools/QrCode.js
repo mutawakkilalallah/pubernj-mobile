@@ -29,20 +29,9 @@ const QrCode = ({navigation}) => {
       });
     } catch (err) {
       if (err?.response?.status === 404) {
-        const resp = await axios.get(
-          `${apiUrl}/santri/${decodedHeader.uuid_person}`,
-          {
-            headers: {
-              'x-auth-token': auth,
-            },
-          },
-        );
-        navigation.replace('SantriDetail', {
-          uuid: resp.data.data.uuid,
-          niup: resp.data.data.niup,
-        });
+        alert('Santri tidak terdaftar sebagai anggota rombongan');
       } else {
-        notifError(err);
+        alert('QR Code tidak dikenal !');
       }
     }
   };
@@ -60,6 +49,8 @@ const QrCode = ({navigation}) => {
       </Box>
       <QRCodeScanner
         cameraStyle={{height: '100%'}}
+        reactivate={true}
+        reactivateTimeout={6000}
         onRead={e => onRead(e)}></QRCodeScanner>
     </View>
   );
