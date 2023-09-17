@@ -22,6 +22,7 @@ const Dashboard = ({navigation}) => {
     'wilayah',
     'daerah',
     'keuangan',
+    'bps',
   ];
   const isEbekal = ebekal.includes(user?.role);
   const kepulangan = [
@@ -33,6 +34,8 @@ const Dashboard = ({navigation}) => {
     'p4nj',
   ];
   const isKepulangan = kepulangan.includes(user?.role);
+  const notBpsPendamping = ['pendamping', 'bps'];
+  const IsNotBpsPendamping = !notBpsPendamping.includes(user.role);
 
   const getUser = async () => {
     const user = JSON.parse(await AsyncStorage.getItem('user'));
@@ -155,28 +158,32 @@ const Dashboard = ({navigation}) => {
             </Box>
           </Pressable>
         )}
-        <Pressable
-          w={20}
-          h={20}
-          onPress={() => navigation.navigate('AreaList')}>
-          <Box alignItems={'center'}>
-            <Icon name="map" size={32} color={'#881337'} />
-            <Text mt={2} color={'black'}>
-              Area
-            </Text>
-          </Box>
-        </Pressable>
-        <Pressable
-          w={20}
-          h={20}
-          onPress={() => navigation.navigate('DropspotList')}>
-          <Box alignItems={'center'}>
-            <Icon name="location-dot" size={32} color={'#171717'} />
-            <Text mt={2} color={'black'}>
-              Dropspot
-            </Text>
-          </Box>
-        </Pressable>
+        {IsNotBpsPendamping && (
+          <Pressable
+            w={20}
+            h={20}
+            onPress={() => navigation.navigate('AreaList')}>
+            <Box alignItems={'center'}>
+              <Icon name="map" size={32} color={'#881337'} />
+              <Text mt={2} color={'black'}>
+                Area
+              </Text>
+            </Box>
+          </Pressable>
+        )}
+        {IsNotBpsPendamping && (
+          <Pressable
+            w={20}
+            h={20}
+            onPress={() => navigation.navigate('DropspotList')}>
+            <Box alignItems={'center'}>
+              <Icon name="location-dot" size={32} color={'#171717'} />
+              <Text mt={2} color={'black'}>
+                Dropspot
+              </Text>
+            </Box>
+          </Pressable>
+        )}
         {isKepulangan && (
           <Pressable
             w={20}

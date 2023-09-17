@@ -17,7 +17,7 @@ const UbahPersyaratan = ({route, navigation}) => {
   const [kamtib, setKamtib] = useState(route.params.kamtib);
 
   const user = route.params.user;
-  const allowBps = ['sysadmin', 'bendahara'];
+  const allowBps = ['sysadmin', 'bps'];
   const isAllowBPS = allowBps.includes(user?.role);
   const AllowKos = ['sysadmin', 'keuangan'];
   const isAllowKos = AllowKos.includes(user?.role);

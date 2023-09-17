@@ -152,11 +152,11 @@ const PrivacyPolicyScreen = () => {
         <Text fontSize={16} fontWeight={'bold'} mt={8} mb={4}>
           HUBUNGI KAMI
         </Text>
-        <Text>
+        <Text mb={8}>
           Jika Anda memiliki pertanyaan mengenai Kebijakan Privasi ini atau
           mengenai ketidakpuasan Anda dengan cara kami menangani pertanyaan atau
           keluhan. Anda dapat menghubungi kami melalui kontak kami di
-          @puber.nuruljadid.net.
+          @puber.nuruljadid.io.
         </Text>
       </ScrollView>
     </View>

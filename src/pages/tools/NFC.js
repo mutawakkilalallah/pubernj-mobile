@@ -1,4 +1,4 @@
-import {Box, Button, Text, View} from 'native-base';
+import {Badge, Box, Button, Spinner, Text, View} from 'native-base';
 import React, {useEffect, useState} from 'react';
 import {HeaderPage} from '../../components';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -6,27 +6,31 @@ import {apiUrl} from '../../config';
 import axios from 'axios';
 import NfcManager, {NfcTech} from 'react-native-nfc-manager';
 import Icon from 'react-native-vector-icons/FontAwesome6';
-import {notifError} from '../../utils';
 
 const NFCScan = ({navigation}) => {
   const [hasNfc, setHasNFC] = useState(false);
   const [nfcActive, setNfcActive] = useState(false);
 
-  useEffect(() => {
-    const checkNfc = async () => {
-      const isSupport = await NfcManager.isSupported();
-      if (isSupport) {
-        const isEnabled = await NfcManager.isEnabled();
-        setHasNFC(true);
-        if (isEnabled) {
-          NfcManager.start();
-          setNfcActive(true);
-        }
-      }
-    };
+  const [nfcReader, updateNfc] = useState(false);
 
-    const readNefAndRestart = async () => {
-      try {
+  useEffect(() => {
+    startNfc();
+
+    () => NfcManager.cancelTechnologyRequest(); // unmount the scanner on navigate away.
+  }, [nfcReader]);
+
+  const startNfc = async () => {
+    try {
+      const supported = await NfcManager.isSupported();
+      if (supported) {
+        setHasNFC(true);
+      }
+      const enabled = await NfcManager.isEnabled();
+      if (enabled) {
+        setNfcActive(true);
+      }
+      if (supported && enabled) {
+        await NfcManager.start();
         await NfcManager.requestTechnology(NfcTech.Ndef);
         const tag = await NfcManager.getTag();
         const auth = JSON.parse(await AsyncStorage.getItem('token'));
@@ -50,28 +54,26 @@ const NFCScan = ({navigation}) => {
               niup: respPen?.data?.data?.santri?.niup,
             });
           } catch (err) {
+            // console.log(err);
             alert('Santri tidak terdaftar sebagai anggota rombongan');
+            await NfcManager.cancelTechnologyRequest(); // Have to reset nfc scanner.
+            updateNfc(!nfcReader); // toggle a reset nfc scanner use effect hook.
           }
         } catch (err) {
+          // console.log(err);
           alert('Kartu tidak dikenal !');
-        } finally {
-          await NfcManager.cancelTechnologyRequest();
-
-          // Memulai pemindaian kembali setelah pemindaian selesai
-          readNefAndRestart();
+          await NfcManager.cancelTechnologyRequest(); // Have to reset nfc scanner.
+          updateNfc(!nfcReader); // toggle a reset nfc scanner use effect hook.
         }
-      } catch (ex) {
-        notifError(ex);
-      } finally {
-        await NfcManager.cancelTechnologyRequest();
       }
-    };
-
-    checkNfc();
-
-    // Memulai pemindaian pertama kali saat komponen dimuat
-    readNefAndRestart();
-  }, []);
+      NfcManager.cancelTechnologyRequest(); // Have to reset nfc scanner.
+      updateNfc(!nfcReader); // toggle a reset nfc scanner use effect hook.
+    } catch (error) {
+      // console.log(error);
+      NfcManager.cancelTechnologyRequest();
+      updateNfc(!nfcReader);
+    }
+  };
 
   return (
     <View flex={1}>
@@ -87,19 +89,19 @@ const NFCScan = ({navigation}) => {
       <View flex={1} alignItems={'center'} justifyContent={'center'}>
         <Icon name="nfc-symbol" size={128} color={'#999'} />
         {hasNfc && nfcActive && (
-          <Button mt={8} backgroundColor={'success.600'}>
+          <Badge mt={8} colorScheme={'success'}>
             NFC Tersedia dan siap digunakan
-          </Button>
+          </Badge>
         )}
         {hasNfc && !nfcActive && (
-          <Button mt={8} backgroundColor={'yellow.600'}>
+          <Badge mt={8} colorScheme={'warning'}>
             NFC Tersedia, tapi belum diaktifkan
-          </Button>
+          </Badge>
         )}
         {!hasNfc && !nfcActive && (
-          <Button mt={8} backgroundColor={'danger.600'}>
+          <Badge mt={8} colorScheme={'danger'}>
             Perangkat ini tidak didukung NFC
-          </Button>
+          </Badge>
         )}
       </View>
     </View>

@@ -75,7 +75,10 @@ const Login = ({navigation}) => {
         NURUL JADID &copy; 2023
       </Text>
       <Text color={'muted.500'}>Mutawakkil Alallah</Text>
-      <Box
+      <Text color={'muted.500'} mt={4}>
+        v 1.0.0
+      </Text>
+      {/* <Box
         mt={4}
         backgroundColor={'red.500'}
         py={1}
@@ -89,11 +92,11 @@ const Login = ({navigation}) => {
         <Text color={'white'} fontStyle={'italic'}>
           For development only
         </Text>
-      </Box>
+      </Box> */}
       <Text
         color={'muted.500'}
         fontSize={12}
-        mt={8}
+        mt={12}
         textAlign={'center'}
         px={8}>
         This application is only for internal use. Registration is only in

@@ -22,10 +22,23 @@ const PenumpangDetail = ({route, navigation}) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({});
   const [user, setUser] = useState({});
+  const isLayak =
+    data?.jumlah_bayar >= data?.dropspot?.harga &&
+    data?.persyaratan?.lunas_bps &&
+    data?.persyaratan?.lunas_kosmara &&
+    data?.persyaratan?.tuntas_fa &&
+    data?.persyaratan?.bebas_kamtib;
 
   const editDrop = ['sysadmin', 'admin', 'wilayah', 'daerah'];
   const isEditDrop = editDrop.includes(user?.role);
-  const editSyarat = ['sysadmin', 'admin', 'keuangan', 'wilayah', 'daerah'];
+  const editSyarat = [
+    'sysadmin',
+    'admin',
+    'keuangan',
+    'bps',
+    'wilayah',
+    'daerah',
+  ];
   const isEditSyarat = editSyarat.includes(user?.role);
 
   const getUser = async () => {
@@ -119,6 +132,9 @@ const PenumpangDetail = ({route, navigation}) => {
                 </Text>
                 <Text fontSize={'md'}>{data?.santri?.raw?.provinsi}</Text>
               </HStack>
+              <Badge colorScheme={isLayak ? 'success' : 'danger'} mt={4}>
+                <Text>{!isLayak && <Text>BELUM </Text>}BERHAK PULANG</Text>
+              </Badge>
             </Box>
             <Box p={4} my={4} shadow={'3'} backgroundColor={'white'}>
               <Text fontSize={'md'}>NIUP : {data?.santri?.niup}</Text>

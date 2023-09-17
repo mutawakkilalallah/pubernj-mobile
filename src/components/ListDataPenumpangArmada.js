@@ -24,9 +24,18 @@ const ListDataPenumpangArmada = ({
   blok,
   keberangkatan,
 }) => {
+  const [user, setUser] = useState({});
   const [image, setImage] = useState('');
   const [load, setLoad] = useState(false);
   const [status, setStatus] = useState(keberangkatan);
+
+  const absen = ['sysadmin', 'bps'];
+  const isAbsen = absen.includes(user.role);
+
+  const getUser = async () => {
+    const user = JSON.parse(await AsyncStorage.getItem('user'));
+    setUser(user);
+  };
 
   const handleHadir = async () => {
     setLoad(true);
@@ -48,7 +57,6 @@ const ListDataPenumpangArmada = ({
       setLoad(false);
       notifSuccess(resp);
     } catch (err) {
-      console.log(err);
       setLoad(false);
       notifError(err);
     }
@@ -73,6 +81,10 @@ const ListDataPenumpangArmada = ({
       }
     };
     getImage();
+  }, []);
+
+  useEffect(() => {
+    getUser();
   }, []);
 
   return (
@@ -123,22 +135,24 @@ const ListDataPenumpangArmada = ({
             </Badge>
           </Box>
         </HStack>
-        <Box alignItems={'center'}>
-          {load ? (
-            <Button p={2} borderRadius={5} backgroundColor={'muted.300'}>
-              <Spinner size={'lg'} color={'lime.900'} />
-            </Button>
-          ) : (
-            <Button
-              onPress={() => handleHadir()}
-              p={4}
-              borderRadius={5}
-              colorScheme={'lime'}
-              isDisabled={status != 'di-asrama'}>
-              <Icon name="stopwatch" size={16} color={'#fff'} />
-            </Button>
-          )}
-        </Box>
+        {isAbsen && (
+          <Box alignItems={'center'}>
+            {load ? (
+              <Button p={2} borderRadius={5} backgroundColor={'muted.300'}>
+                <Spinner size={'lg'} color={'lime.900'} />
+              </Button>
+            ) : (
+              <Button
+                onPress={() => handleHadir()}
+                p={4}
+                borderRadius={5}
+                colorScheme={'lime'}
+                isDisabled={status != 'di-asrama'}>
+                <Icon name="stopwatch" size={16} color={'#fff'} />
+              </Button>
+            )}
+          </Box>
+        )}
       </HStack>
     </View>
   );

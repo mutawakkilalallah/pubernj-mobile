@@ -29,7 +29,7 @@ const TermOfServiceScreen = () => {
           Ketentuan ini memiliki arti seperti berikut di bawah.
         </Text>
         <Text fontWeight={'bold'}>SITUS</Text>
-        <Text>berarti nuruljadid.app</Text>
+        <Text>berarti puber.nuruljadid.io</Text>
         <Text fontWeight={'bold'}>APLIKASI PUBER</Text>
         <Text>
           berarti Situs puber.nuruljadid.io atau aplikasi mobile (android/ios)
@@ -154,7 +154,7 @@ const TermOfServiceScreen = () => {
         <Text fontSize={16} fontWeight={'bold'} mt={8} mb={4}>
           PEMBAHARUAN
         </Text>
-        <Text>
+        <Text mb={8}>
           Syarat & ketentuan mungkin diubah dan/atau diperbaharui dari waktu ke
           waktu tanpa pemberitahuan sebelumnya. Kami menyarankan agar anda
           membaca secara seksama dan memeriksa halaman Syarat & ketentuan ini

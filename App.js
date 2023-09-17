@@ -17,8 +17,8 @@ const App = () => {
   return (
     <NativeBaseProvider>
       <NavigationContainer>
-        <MyStatusBar backgroundColor="#365314" barStyle="light-content" />
-        {/* <StatusBar barStyle={'light-content'} backgroundColor={'#365314'} /> */}
+        {/* <MyStatusBar backgroundColor="#365314" barStyle="light-content" /> */}
+        <StatusBar barStyle={'light-content'} backgroundColor={'#365314'} />
         <FlashMessage position="top" />
         <Router />
       </NavigationContainer>
