@@ -29,4 +29,11 @@ public class MainActivity extends ReactActivity {
         // If you opted-in for the New Architecture, we enable the Fabric Renderer.
         DefaultNewArchitectureEntryPoint.getFabricEnabled());
   }
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    androidx.core.splashscreen.SplashScreen.installSplashScreen(this); // native splash screen which will be skipped
+    org.devio.rn.splashscreen.SplashScreen.show(this, true); // custom splash screen from react-native-splash-screen library
+    super.onCreate(null);
+  }
 }
