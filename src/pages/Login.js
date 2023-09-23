@@ -76,7 +76,7 @@ const Login = ({navigation}) => {
       </Text>
       <Text color={'muted.500'}>Mutawakkil Alallah</Text>
       <Text color={'muted.500'} mt={4}>
-        v 1.0.0
+        v 1.1.0
       </Text>
       {/* <Box
         mt={4}
