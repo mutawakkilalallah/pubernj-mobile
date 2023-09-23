@@ -15,6 +15,7 @@ import {apiUrl} from '../config';
 import {notifError, notifSuccess} from '../utils';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import axios from 'axios';
+import {showMessage} from 'react-native-flash-message';
 
 const ListDataPenumpangArmada = ({
   id,
@@ -23,6 +24,7 @@ const ListDataPenumpangArmada = ({
   wilayah,
   blok,
   keberangkatan,
+  isBelum,
 }) => {
   const [user, setUser] = useState({});
   const [image, setImage] = useState('');
@@ -58,7 +60,20 @@ const ListDataPenumpangArmada = ({
       notifSuccess(resp);
     } catch (err) {
       setLoad(false);
-      notifError(err);
+      if (
+        err?.response?.data?.error === 'Request failed with status code 404'
+      ) {
+        showMessage({
+          message: 'Ops.. ! Tampaknya terjadi kesalahan',
+          description:
+            'Data perizinan tidak ditemukan, bisa jadi "Santri" belum menyelesaikan persyaratan',
+          type: 'danger',
+          icon: 'danger',
+          duration: 4000,
+        });
+      } else {
+        notifError(err);
+      }
     }
   };
 
@@ -147,7 +162,7 @@ const ListDataPenumpangArmada = ({
                 p={4}
                 borderRadius={5}
                 colorScheme={'lime'}
-                isDisabled={status != 'di-asrama'}>
+                isDisabled={status != 'di-asrama' || isBelum}>
                 <Icon name="stopwatch" size={16} color={'#fff'} />
               </Button>
             )}

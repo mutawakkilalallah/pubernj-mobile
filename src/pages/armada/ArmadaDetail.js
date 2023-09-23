@@ -22,6 +22,7 @@ import Icon from 'react-native-vector-icons/FontAwesome6';
 
 const ArmadaDetail = ({route, navigation}) => {
   const [loading, setLoading] = useState(false);
+  const [isBelum, setIsBelum] = useState(false);
   const [image, setImage] = useState('');
   const [data, setData] = useState({});
 
@@ -35,6 +36,15 @@ const ArmadaDetail = ({route, navigation}) => {
         },
       });
       setData(resp.data.data);
+      if (resp.data.data?.jenis === 'putra') {
+        setIsBelum(
+          new Date() < new Date(resp.data.data?.dropspot?.jam_berangkat_pa),
+        );
+      } else if (resp.data.data?.jenis === 'putri') {
+        setIsBelum(
+          new Date() < new Date(resp.data.data?.dropspot?.jam_berangkat_pi),
+        );
+      }
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -83,6 +93,11 @@ const ArmadaDetail = ({route, navigation}) => {
         navigation={navigation}
         link="ArmadaList"
       />
+      {isBelum && (
+        <Box alignItems={'center'} bg={'red.500'}>
+          <Text color={'white'}>Masih belum tiba waktu keberangkatan !</Text>
+        </Box>
+      )}
       {!loading && (
         <Box>
           <Box p={2} backgroundColor={'white'} shadow={4}>
@@ -159,6 +174,7 @@ const ArmadaDetail = ({route, navigation}) => {
               wilayah={`${item?.santri?.wilayah}`}
               blok={`${item?.santri?.blok}`}
               keberangkatan={item?.status_keberangkatan}
+              isBelum={isBelum}
             />
           )}
           keyExtractor={item => item.id}
