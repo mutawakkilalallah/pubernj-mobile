@@ -29,7 +29,7 @@ const ListDataPenumpangArmada = ({
   const [load, setLoad] = useState(false);
   const [status, setStatus] = useState(keberangkatan);
 
-  const absen = ['sysadmin', 'bps'];
+  const absen = ['sysadmin', 'pendamping'];
   const isAbsen = absen.includes(user.role);
 
   const getUser = async () => {
