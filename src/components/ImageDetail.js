@@ -3,7 +3,7 @@ import {Box, Spinner, View, Image} from 'native-base';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNFetchBlob from 'rn-fetch-blob';
 import {apiUrl} from '../config';
-import {notifError} from '../utils';
+import {notifError, notifErrorCustom} from '../utils';
 
 const ImageDetail = ({niup}) => {
   const [image, setImage] = useState('');
@@ -14,8 +14,8 @@ const ImageDetail = ({niup}) => {
       try {
         const resp = await RNFetchBlob.config({
           trusty: true,
-        }).fetch('GET', `${apiUrl}/santri/image/${niup}?size=medium`, {
-          'x-auth-token': token,
+        }).fetch('GET', `${apiUrl}/person/image/${niup}?size=medium`, {
+          'X-Auth': token,
         });
         if (resp.info().status === 200) {
           const base64 = await resp.base64();
@@ -23,7 +23,7 @@ const ImageDetail = ({niup}) => {
           setImage(imageBase64);
         }
       } catch (err) {
-        notifError(err);
+        notifErrorCustom(err);
       }
     };
     getImage();

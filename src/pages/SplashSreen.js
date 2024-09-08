@@ -23,12 +23,12 @@ const SplashSreen = ({navigation}) => {
       flex={1}
       justifyContent={'center'}
       alignItems={'center'}
-      backgroundColor={'lime.900'}>
+      backgroundColor={'white'}>
       <Image
-        source={require('../assets/puber.png')}
+        source={require('../assets/pkbs.png')}
         alt="logo-puber"
-        width={260}
-        height={130}
+        width={300}
+        height={300}
       />
     </View>
   );

@@ -20,7 +20,9 @@ import {
   ArmadaDetail,
   Development,
   NFCScan,
+  Tuntas,
   TermOfServiceScreen,
+  DaftarPenumpang,
 } from '../pages';
 import PrivacyPolicyScreen from '../pages/TOR';
 
@@ -38,6 +40,7 @@ const Router = () => {
       <Stack.Screen name="SantriDetail" component={SantriDetail} />
       <Stack.Screen name="PenumpangList" component={PenumpangList} />
       <Stack.Screen name="PenumpangDetail" component={PenumpangDetail} />
+      <Stack.Screen name="DaftarPenumpang" component={DaftarPenumpang} />
       <Stack.Screen name="UbahPersyaratan" component={UbahPersyaratan} />
       <Stack.Screen name="UbahDropspot" component={UbahDropspot} />
       <Stack.Screen name="PersyaratanList" component={PersyaratanList} />
@@ -48,6 +51,7 @@ const Router = () => {
       <Stack.Screen name="UserList" component={UserList} />
       <Stack.Screen name="QrCode" component={QrCode} />
       <Stack.Screen name="NFCScan" component={NFCScan} />
+      <Stack.Screen name="Tuntas" component={Tuntas} />
       <Stack.Screen name="UbahPassword" component={UbahPassword} />
       <Stack.Screen name="Development" component={Development} />
       <Stack.Screen name="TOR" component={PrivacyPolicyScreen} />

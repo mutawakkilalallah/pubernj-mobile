@@ -6,6 +6,7 @@ import {apiUrl} from '../../config';
 import axios from 'axios';
 import NfcManager, {NfcTech} from 'react-native-nfc-manager';
 import Icon from 'react-native-vector-icons/FontAwesome6';
+import {notifSuccess} from '../../utils';
 
 const NFCScan = ({navigation}) => {
   const [hasNfc, setHasNFC] = useState(false);
@@ -16,7 +17,11 @@ const NFCScan = ({navigation}) => {
   useEffect(() => {
     startNfc();
 
-    () => NfcManager.cancelTechnologyRequest(); // unmount the scanner on navigate away.
+    return () => {
+      NfcManager.cancelTechnologyRequest(); // Cancel NFC scanner when unmounting or navigating away
+    };
+
+    // () => NfcManager.cancelTechnologyRequest(); // unmount the scanner on navigate away.
   }, [nfcReader]);
 
   const startNfc = async () => {
@@ -35,23 +40,24 @@ const NFCScan = ({navigation}) => {
         const tag = await NfcManager.getTag();
         const auth = JSON.parse(await AsyncStorage.getItem('token'));
         try {
-          const resp = await axios.get(`${apiUrl}/santri/card/${tag.id}`, {
+          const resp = await axios.get(`${apiUrl}/person/card/${tag.id}`, {
+            // const resp = await axios.get(`${apiUrl}/person/card/5C7CF1AF`, {
             headers: {
-              'x-auth-token': auth,
+              'X-Auth': auth,
             },
           });
           try {
             const respPen = await axios.get(
-              `${apiUrl}/penumpang/${resp.data.data.uuid}`,
+              `${apiUrl}/santri/${resp.data.data.uuid}`,
               {
                 headers: {
-                  'x-auth-token': auth,
+                  'X-Auth': auth,
                 },
               },
             );
             navigation.replace('PenumpangDetail', {
-              uuid: respPen?.data?.data?.santri_uuid,
-              niup: respPen?.data?.data?.santri?.niup,
+              uuid: respPen?.data?.data?.uuid,
+              niup: respPen?.data?.data?.niup,
             });
           } catch (err) {
             // console.log(err);

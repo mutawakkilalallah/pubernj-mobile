@@ -4,6 +4,7 @@ import {Box, HStack, Image, Pressable, Spinner, Text, View} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import RNFetchBlob from 'rn-fetch-blob';
 import {apiUrl} from '../config';
+import {notifErrorCustom} from '../utils';
 
 const Dashboard = ({navigation}) => {
   const [user, setUser] = useState({});
@@ -49,8 +50,8 @@ const Dashboard = ({navigation}) => {
       try {
         const resp = await RNFetchBlob.config({
           trusty: true,
-        }).fetch('GET', `${apiUrl}/santri/image/${user.niup}?size=small`, {
-          'x-auth-token': token,
+        }).fetch('GET', `${apiUrl}/person/image/${user.niup}?size=small`, {
+          'X-Auth': token,
         });
         if (resp.info().status === 200) {
           const base64 = await resp.base64();
@@ -61,7 +62,7 @@ const Dashboard = ({navigation}) => {
           navigation.replace('Login');
         }
       } catch (err) {
-        notifError(err);
+        notifErrorCustom(err);
       }
     };
     getImage();
@@ -79,15 +80,6 @@ const Dashboard = ({navigation}) => {
   return (
     <View backgroundColor={'white'} flex={1}>
       <Box backgroundColor={'lime.900'} width={'100%'} alignItems={'center'}>
-        <Image
-          source={require('../assets/puber.png')}
-          alt="logo-puber"
-          width={200}
-          height={100}
-          mt={8}
-          mb={8}
-          opacity={0.4}
-        />
         <Box alignItems={'center'}>
           {!image ? (
             <Box
@@ -97,6 +89,7 @@ const Dashboard = ({navigation}) => {
               mr={4}
               h={16}
               w={16}
+              mt={4}
               mb={4}
               justifyContent={'center'}>
               <Spinner color={'lime.900'} size={'lg'} />
@@ -108,6 +101,7 @@ const Dashboard = ({navigation}) => {
               w={16}
               h={16}
               mr={4}
+              mt={4}
               mb={4}
               borderRadius={100}
             />
@@ -115,127 +109,56 @@ const Dashboard = ({navigation}) => {
           <Text color={'white'} fontSize={'lg'}>
             {user.nama_lengkap}
           </Text>
-          <Text color={'white'} mb={8}>
-            ({user.role})
-          </Text>
+          {user.role == 'wilayah' ? (
+            <Text color={'white'} mb={8}>
+              {user.wilayah}
+            </Text>
+          ) : user.role == 'daerah' ? (
+            <Text color={'white'} mb={8}>
+              {user.blok}
+            </Text>
+          ) : (
+            <Text color={'white'} mb={8}>
+              {user.role}
+            </Text>
+          )}
         </Box>
       </Box>
-      <HStack flexWrap={'wrap'} mt={4} justifyContent={'center'} space={2}>
-        {isInternal && (
-          <Pressable
-            w={20}
-            h={20}
-            onPress={() => navigation.navigate('SantriList')}>
-            <Box alignItems={'center'}>
-              <Icon name="users" size={32} color={'#164e63'} />
-              <Text mt={2} color={'black'}>
-                Santri
-              </Text>
-            </Box>
-          </Pressable>
-        )}
+      <Text ml={4} mt={4} fontWeight={'bold'}>
+        DATA POKOK
+      </Text>
+      <HStack flexWrap={'wrap'} mt={4} ml={4}>
         <Pressable
           w={20}
           h={20}
           onPress={() => navigation.navigate('PenumpangList')}>
           <Box alignItems={'center'}>
-            <Icon name="briefcase" size={32} color={'#831843'} />
+            <Icon name="street-view" size={32} color={'#3b3b3b'} />
             <Text mt={2} color={'black'}>
               Penumpang
             </Text>
           </Box>
         </Pressable>
-        {isEbekal && (
-          <Pressable
-            w={20}
-            h={20}
-            onPress={() => navigation.navigate('PersyaratanList')}>
-            <Box alignItems={'center'}>
-              <Icon name="file-pen" size={32} color={'#064e3b'} />
-              <Text mt={2} color={'black'}>
-                Persyaratan
-              </Text>
-            </Box>
-          </Pressable>
-        )}
-        {IsNotBpsPendamping && (
-          <Pressable
-            w={20}
-            h={20}
-            onPress={() => navigation.navigate('AreaList')}>
-            <Box alignItems={'center'}>
-              <Icon name="map" size={32} color={'#881337'} />
-              <Text mt={2} color={'black'}>
-                Area
-              </Text>
-            </Box>
-          </Pressable>
-        )}
-        {IsNotBpsPendamping && (
-          <Pressable
-            w={20}
-            h={20}
-            onPress={() => navigation.navigate('DropspotList')}>
-            <Box alignItems={'center'}>
-              <Icon name="location-dot" size={32} color={'#171717'} />
-              <Text mt={2} color={'black'}>
-                Dropspot
-              </Text>
-            </Box>
-          </Pressable>
-        )}
-        {isKepulangan && (
-          <Pressable
-            w={20}
-            h={20}
-            onPress={() => navigation.navigate('ArmadaList')}>
-            <Box alignItems={'center'}>
-              <Icon name="bus" size={32} color={'#c026d3'} />
-              <Text mt={2} color={'black'}>
-                Armada
-              </Text>
-            </Box>
-          </Pressable>
-        )}
-        {isAdmin && (
-          <Pressable
-            w={20}
-            h={20}
-            onPress={() => navigation.navigate('UserList')}>
-            <Box alignItems={'center'}>
-              <Icon name="user-gear" size={32} color={'#0d9488'} />
-              <Text mt={2} color={'black'}>
-                Users Account
-              </Text>
-            </Box>
-          </Pressable>
-        )}
-        {isSysadmin && (
-          <Pressable
-            w={20}
-            h={20}
-            onPress={() => navigation.navigate('Development')}>
-            <Box alignItems={'center'}>
-              <Icon name="credit-card" size={32} color={'#7c3aed'} />
-              <Text mt={2} color={'black'}>
-                Keuangan
-              </Text>
-            </Box>
-          </Pressable>
-        )}
-        <Pressable w={20} h={20} onPress={() => navigation.navigate('QrCode')}>
+      </HStack>
+      <Text ml={4} mt={4} fontWeight={'bold'}>
+        PERSYARATAN
+      </Text>
+      <HStack flexWrap={'wrap'} mt={4} ml={4}>
+        <Pressable
+          w={20}
+          h={20}
+          onPress={() =>
+            navigation.navigate({
+              name: 'Tuntas',
+              params: {
+                type: 'FA',
+              },
+            })
+          }>
           <Box alignItems={'center'}>
-            <Icon name="qrcode" size={32} color={'#ef4444'} />
+            <Icon name="file-waveform" size={32} color={'#3b3b3b'} />
             <Text mt={2} color={'black'}>
-              QR Code
-            </Text>
-          </Box>
-        </Pressable>
-        <Pressable w={20} h={20} onPress={() => navigation.navigate('NFCScan')}>
-          <Box alignItems={'center'}>
-            <Icon name="nfc-symbol" size={32} color={'#f59e0b'} />
-            <Text mt={2} color={'black'}>
-              NFC
+              Setoran
             </Text>
           </Box>
         </Pressable>
@@ -244,26 +167,75 @@ const Dashboard = ({navigation}) => {
           h={20}
           onPress={() =>
             navigation.navigate({
-              name: 'UbahPassword',
-              params: {uuid: user.uuid},
+              name: 'Tuntas',
+              params: {
+                type: 'KAMTIB',
+              },
             })
           }>
           <Box alignItems={'center'}>
-            <Icon name="key" size={32} color={'#0077e6'} />
-            <Text mt={2} color={'black'} textAlign={'center'}>
-              Ubah Password
+            <Icon name="file-waveform" size={32} color={'#3b3b3b'} />
+            <Text mt={2} color={'black'}>
+              Pelanggaran
             </Text>
           </Box>
         </Pressable>
+      </HStack>
+      <Text ml={4} mt={4} fontWeight={'bold'}>
+        ALAT
+      </Text>
+      <HStack flexWrap={'wrap'} mt={4} ml={4}>
+        <Pressable w={20} h={20} onPress={() => navigation.navigate('QrCode')}>
+          <Box alignItems={'center'}>
+            <Icon name="barcode" size={32} color={'#3b3b3b'} />
+            <Text mt={2} color={'black'}>
+              QR Code
+            </Text>
+          </Box>
+        </Pressable>
+        <Pressable w={20} h={20} onPress={() => navigation.navigate('NFCScan')}>
+          <Box alignItems={'center'}>
+            <Icon name="nfc-directional" size={32} color={'#3b3b3b'} />
+            <Text mt={2} color={'black'}>
+              NFC
+            </Text>
+          </Box>
+        </Pressable>
+      </HStack>
+      <Text ml={4} mt={4} fontWeight={'bold'}>
+        PENGATURAN
+      </Text>
+      <HStack flexWrap={'wrap'} mt={4} ml={4}>
         <Pressable w={20} h={20} onPress={() => handleLogout()}>
           <Box alignItems={'center'}>
-            <Icon name="power-off" size={32} color={'#ec4899'} />
+            <Icon name="plug" size={32} color={'#3b3b3b'} />
             <Text mt={2} color={'black'}>
               Logout
             </Text>
           </Box>
         </Pressable>
       </HStack>
+      <View
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: -10,
+        }}>
+        <Image
+          source={require('../assets/pkbs.png')}
+          alt="logo-puber"
+          width={400}
+          height={400}
+          mt={8}
+          mb={8}
+          opacity={'0.1'}
+        />
+      </View>
     </View>
   );
 };

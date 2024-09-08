@@ -13,7 +13,7 @@ import {
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {apiUrl} from '../config';
-import {notifError} from '../utils';
+import {notifError, notifErrorCustom} from '../utils';
 
 const Login = ({navigation}) => {
   const [username, setUsername] = useState('');
@@ -28,25 +28,34 @@ const Login = ({navigation}) => {
       const resp = await axios.post(`${apiUrl}/login`, form);
       await AsyncStorage.setItem('token', JSON.stringify(resp.data.token));
       await AsyncStorage.setItem('user', JSON.stringify(resp.data.data));
-      navigation.replace('Dashboard');
+      if (resp.data.data.role != 'wilayah' && resp.data.data.role != 'daerah') {
+        notifErrorCustom(null, 403);
+      } else {
+        navigation.replace('Dashboard');
+      }
     } catch (err) {
-      notifError(err);
+      notifErrorCustom(err);
     }
   };
 
   return (
     <View backgroundColor={'white'} flex={1} alignItems={'center'}>
-      <Box backgroundColor={'lime.900'} width={'100%'} alignItems={'center'}>
+      <Box backgroundColor={'white'} width={'100%'} alignItems={'center'}>
         <Image
-          source={require('../assets/puber.png')}
+          source={require('../assets/pkbs.png')}
           alt="logo-puber"
-          width={200}
-          height={100}
+          height={150}
+          width={150}
           mt={8}
-          mb={16}
-          opacity={0.4}
+          mb={8}
         />
       </Box>
+      <Text color={'lime.900'} fontSize={24} fontWeight={'bold'}>
+        PULANG BERSAMA
+      </Text>
+      <Text color={'lime.900'} fontSize={14}>
+        Pondok Pesantren Nurul Jadid Paiton Probolinggo
+      </Text>
       <Box mt={8}>
         <Input
           placeholder="Username"
@@ -72,27 +81,12 @@ const Login = ({navigation}) => {
         </Button>
       </Box>
       <Text color={'muted.500'} mt={16}>
-        NURUL JADID &copy; 2023
+        NURUL JADID &copy; 2023 - 2024
       </Text>
       <Text color={'muted.500'}>Mutawakkil Alallah</Text>
       <Text color={'muted.500'} mt={4}>
-        v 1.1.0
+        v 1.8.12
       </Text>
-      {/* <Box
-        mt={4}
-        backgroundColor={'red.500'}
-        py={1}
-        px={16}
-        borderRadius={4}
-        alignItems={'center'}>
-        <Text color={'white'}>Beta v.1.05.23</Text>
-        <Text color={'white'} fontWeight={'black'}>
-          Non Official Release
-        </Text>
-        <Text color={'white'} fontStyle={'italic'}>
-          For development only
-        </Text>
-      </Box> */}
       <Text
         color={'muted.500'}
         fontSize={12}

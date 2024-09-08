@@ -3,7 +3,7 @@ import {Badge, Box, HStack, Image, Spinner, Text} from 'native-base';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNFetchBlob from 'rn-fetch-blob';
 import {apiUrl} from '../config';
-import {notifError} from '../utils';
+import {notifError, notifErrorCustom} from '../utils';
 
 const ListDataPenumpang = ({niup, nama, dropspot, pembayaran}) => {
   const [image, setImage] = useState('');
@@ -14,8 +14,8 @@ const ListDataPenumpang = ({niup, nama, dropspot, pembayaran}) => {
       try {
         const resp = await RNFetchBlob.config({
           trusty: true,
-        }).fetch('GET', `${apiUrl}/santri/image/${niup}?size=small`, {
-          'x-auth-token': token,
+        }).fetch('GET', `${apiUrl}/person/image/${niup}?size=small`, {
+          'X-Auth': token,
         });
         if (resp.info().status === 200) {
           const base64 = await resp.base64();
@@ -23,7 +23,7 @@ const ListDataPenumpang = ({niup, nama, dropspot, pembayaran}) => {
           setImage(imageBase64);
         }
       } catch (err) {
-        notifError(err);
+        notifErrorCustom(err);
       }
     };
     getImage();

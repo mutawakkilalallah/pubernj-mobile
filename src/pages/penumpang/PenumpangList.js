@@ -15,47 +15,47 @@ import {HeaderPage, ListDataPenumpang} from '../../components';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {apiUrl} from '../../config';
-import {notifError} from '../../utils';
+import {notifError, notifErrorCustom} from '../../utils';
 
 const PenumpangList = ({navigation}) => {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({});
   const [data, setData] = useState([]);
-  const [fltArea, setFltArea] = useState([]);
-  const [fltDrop, setFltDrop] = useState([]);
-  const [fltWilayah, setFltWilayah] = useState([]);
-  const [fltBlok, setFltBlok] = useState([]);
-  const [fltArmada, setFltArmada] = useState([]);
+  // const [fltArea, setFltArea] = useState([]);
+  // const [fltDrop, setFltDrop] = useState([]);
+  // const [fltWilayah, setFltWilayah] = useState([]);
+  // const [fltBlok, setFltBlok] = useState([]);
+  // const [fltArmada, setFltArmada] = useState([]);
   const [meta, setMeta] = useState({});
   const [cari, setCari] = useState('');
-  const [area, setArea] = useState('');
-  const [drop, setDrop] = useState('');
-  const [wilayah, setWilayah] = useState('');
-  const [blok, setBlok] = useState('');
+  // const [area, setArea] = useState('');
+  // const [drop, setDrop] = useState('');
+  // const [wilayah, setWilayah] = useState('');
+  // const [blok, setBlok] = useState('');
   const [jk, setJk] = useState('');
-  const [status, setStatus] = useState('');
-  const [armada, setArmada] = useState('');
+  // const [status, setStatus] = useState('');
+  // const [armada, setArmada] = useState('');
   const [limit, setLimit] = useState(25);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const p4nj = ['p4nj'];
-  const isP4nj = p4nj.includes(user?.role);
-  const pendamping = ['pendamping'];
-  const isPendamping = pendamping.includes(user?.role);
+  // const p4nj = ['p4nj'];
+  // const isP4nj = p4nj.includes(user?.role);
+  // const pendamping = ['pendamping'];
+  // const isPendamping = pendamping.includes(user?.role);
 
   const openModal = () => {
     setModalVisible(!modalVisible);
   };
 
   const handleReset = () => {
-    setArea('');
-    setDrop('');
-    setWilayah('');
-    setBlok('');
+    // setArea('');
+    // setDrop('');
+    // setWilayah('');
+    // setBlok('');
     setCari('');
     setJk('');
-    setStatus('');
-    setArmada('');
+    // setStatus('');
+    // setArmada('');
     setLimit(25);
   };
 
@@ -71,139 +71,139 @@ const PenumpangList = ({navigation}) => {
     try {
       const resp = await axios.get(`${apiUrl}/penumpang`, {
         headers: {
-          'x-auth-token': token,
+          'X-Auth': token,
         },
         params: {
           cari,
-          area,
-          dropspot: drop,
-          wilayah,
-          blok,
-          armada,
+          // area,
+          // dropspot: drop,
+          // wilayah,
+          // blok,
+          // armada,
           jenis_kelamin: jk,
-          pembayaran: status,
+          // pembayaran: status,
           limit,
         },
       });
-      if (user?.role === 'p4nj') {
-        setFltArea(resp.data.filter.area);
-      }
+      // if (user?.role === 'p4nj') {
+      //   setFltArea(resp.data.filter.area);
+      // }
       setLoading(false);
       setData(resp.data.data);
       setMeta(resp.headers);
     } catch (err) {
       setLoading(false);
-      notifError(err);
+      notifErrorCustom(err);
     }
   };
 
-  useEffect(() => {
-    const getArea = async () => {
-      const token = JSON.parse(await AsyncStorage.getItem('token'));
-      const user = JSON.parse(await AsyncStorage.getItem('user'));
-      if (user?.role != 'p4nj') {
-        try {
-          const resp = await axios.get(`${apiUrl}/area`, {
-            headers: {
-              'x-auth-token': token,
-            },
-          });
-          setFltArea(resp.data.data);
-        } catch (err) {
-          notifError(err);
-        }
-      }
-    };
-    getArea();
-  }, []);
+  // useEffect(() => {
+  //   const getArea = async () => {
+  //     const token = JSON.parse(await AsyncStorage.getItem('token'));
+  //     const user = JSON.parse(await AsyncStorage.getItem('user'));
+  //     if (user?.role != 'p4nj') {
+  //       try {
+  //         const resp = await axios.get(`${apiUrl}/area`, {
+  //           headers: {
+  //             'x-auth-token': token,
+  //           },
+  //         });
+  //         setFltArea(resp.data.data);
+  //       } catch (err) {
+  //         notifErrorCustom(err);
+  //       }
+  //     }
+  //   };
+  //   getArea();
+  // }, []);
 
-  useEffect(() => {
-    const getWilayah = async () => {
-      const token = JSON.parse(await AsyncStorage.getItem('token'));
-      const user = JSON.parse(await AsyncStorage.getItem('user'));
-      if (user?.role != 'p4nj') {
-        try {
-          const resp = await axios.get(`${apiUrl}/santri/filter/wilayah`, {
-            headers: {
-              'x-auth-token': token,
-            },
-          });
-          setFltWilayah(resp.data);
-        } catch (err) {
-          notifError(err);
-        }
-      }
-    };
-    getWilayah();
-  }, []);
+  // useEffect(() => {
+  //   const getWilayah = async () => {
+  //     const token = JSON.parse(await AsyncStorage.getItem('token'));
+  //     const user = JSON.parse(await AsyncStorage.getItem('user'));
+  //     if (user?.role != 'p4nj') {
+  //       try {
+  //         const resp = await axios.get(`${apiUrl}/santri/filter/wilayah`, {
+  //           headers: {
+  //             'x-auth-token': token,
+  //           },
+  //         });
+  //         setFltWilayah(resp.data);
+  //       } catch (err) {
+  //         notifErrorCustom(err);
+  //       }
+  //     }
+  //   };
+  //   getWilayah();
+  // }, []);
 
-  useEffect(() => {
-    const getBlok = async () => {
-      const token = JSON.parse(await AsyncStorage.getItem('token'));
-      const user = JSON.parse(await AsyncStorage.getItem('user'));
-      if (user?.role != 'p4nj') {
-        try {
-          const resp = await axios.get(`${apiUrl}/santri/filter/blok`, {
-            headers: {
-              'x-auth-token': token,
-            },
-            params: {
-              alias_wilayah: wilayah,
-            },
-          });
-          setFltBlok(resp.data);
-        } catch (err) {
-          notifError(err);
-        }
-      }
-    };
-    getBlok();
-  }, [wilayah]);
+  // useEffect(() => {
+  //   const getBlok = async () => {
+  //     const token = JSON.parse(await AsyncStorage.getItem('token'));
+  //     const user = JSON.parse(await AsyncStorage.getItem('user'));
+  //     if (user?.role != 'p4nj') {
+  //       try {
+  //         const resp = await axios.get(`${apiUrl}/santri/filter/blok`, {
+  //           headers: {
+  //             'x-auth-token': token,
+  //           },
+  //           params: {
+  //             alias_wilayah: wilayah,
+  //           },
+  //         });
+  //         setFltBlok(resp.data);
+  //       } catch (err) {
+  //         notifErrorCustom(err);
+  //       }
+  //     }
+  //   };
+  //   getBlok();
+  // }, [wilayah]);
 
-  useEffect(() => {
-    const getDrop = async () => {
-      const token = JSON.parse(await AsyncStorage.getItem('token'));
-      try {
-        const resp = await axios.get(`${apiUrl}/dropspot`, {
-          headers: {
-            'x-auth-token': token,
-          },
-          params: {
-            area,
-          },
-        });
-        setFltDrop(resp.data.data);
-      } catch (err) {
-        notifError(err);
-      }
-    };
-    getDrop();
-  }, [area]);
+  // useEffect(() => {
+  //   const getDrop = async () => {
+  //     const token = JSON.parse(await AsyncStorage.getItem('token'));
+  //     try {
+  //       const resp = await axios.get(`${apiUrl}/dropspot`, {
+  //         headers: {
+  //           'x-auth-token': token,
+  //         },
+  //         params: {
+  //           area,
+  //         },
+  //       });
+  //       setFltDrop(resp.data.data);
+  //     } catch (err) {
+  //       notifErrorCustom(err);
+  //     }
+  //   };
+  //   getDrop();
+  // }, [area]);
 
-  useEffect(() => {
-    const getArmada = async () => {
-      const token = JSON.parse(await AsyncStorage.getItem('token'));
-      try {
-        const resp = await axios.get(`${apiUrl}/armada`, {
-          headers: {
-            'x-auth-token': token,
-          },
-          params: {
-            area,
-            dropspot: drop,
-          },
-        });
-        setFltArmada(resp.data.data);
-      } catch (err) {
-        notifError(err);
-      }
-    };
-    getArmada();
-  }, [area, drop]);
+  // useEffect(() => {
+  //   const getArmada = async () => {
+  //     const token = JSON.parse(await AsyncStorage.getItem('token'));
+  //     try {
+  //       const resp = await axios.get(`${apiUrl}/armada`, {
+  //         headers: {
+  //           'x-auth-token': token,
+  //         },
+  //         params: {
+  //           area,
+  //           dropspot: drop,
+  //         },
+  //       });
+  //       setFltArmada(resp.data.data);
+  //     } catch (err) {
+  //       notifErrorCustom(err);
+  //     }
+  //   };
+  //   getArmada();
+  // }, [area, drop]);
 
   useEffect(() => {
     getData();
-  }, [cari, area, drop, wilayah, blok, jk, status, armada, limit]);
+  }, [cari, jk, limit]);
 
   useEffect(() => {
     getUser();
@@ -225,9 +225,7 @@ const PenumpangList = ({navigation}) => {
           onChangeText={setCari}
         />
         <Divider orientation="vertical" />
-        <Button colorScheme={'lime'} onPress={openModal}>
-          FILTER
-        </Button>
+        <Button colorScheme={'lime'}>FILTER</Button>
         <Button colorScheme={'danger'} onPress={() => handleReset()}>
           RESET
         </Button>
@@ -253,8 +251,8 @@ const PenumpangList = ({navigation}) => {
                 <ListDataPenumpang
                   niup={item?.santri?.niup}
                   nama={item?.santri?.nama_lengkap}
-                  dropspot={item?.dropspot?.nama}
-                  pembayaran={item?.status_bayar}
+                  dropspot={item?.dropspot?.namaDropspot}
+                  pembayaran={item?.statusPembayaran}
                 />
               </Pressable>
             );
@@ -262,11 +260,11 @@ const PenumpangList = ({navigation}) => {
           keyExtractor={item => item.id}
         />
       )}
-      <Modal isOpen={modalVisible} onClose={setModalVisible} size={'xl'}>
+      {/* <Modal isOpen={modalVisible} onClose={setModalVisible} size={'xl'}>
         <Modal.Content>
           <Modal.CloseButton />
           <Modal.Header>Filter Penumpang</Modal.Header>
-          <Modal.Content p={4} borderRadius={0} shadow={'none'}>
+          {/* <Modal.Content p={4} borderRadius={0} shadow={'none'}>
             {!isPendamping && (
               <>
                 <Select
@@ -386,7 +384,7 @@ const PenumpangList = ({navigation}) => {
             </Button.Group>
           </Modal.Footer>
         </Modal.Content>
-      </Modal>
+      </Modal> */}
     </View>
   );
 };

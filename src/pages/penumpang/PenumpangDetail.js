@@ -2,6 +2,7 @@ import {
   Badge,
   Box,
   Button,
+  FlatList,
   Divider,
   HStack,
   Pressable,
@@ -22,12 +23,12 @@ const PenumpangDetail = ({route, navigation}) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({});
   const [user, setUser] = useState({});
-  const isLayak =
-    data?.jumlah_bayar >= data?.dropspot?.harga &&
-    data?.persyaratan?.lunas_bps &&
-    data?.persyaratan?.lunas_kosmara &&
-    data?.persyaratan?.tuntas_fa &&
-    data?.persyaratan?.bebas_kamtib;
+  // const isLayak =
+  //   data?.jumlah_bayar >= data?.dropspot?.harga &&
+  //   data?.persyaratan?.lunas_bps &&
+  //   data?.persyaratan?.lunas_kosmara &&
+  //   data?.persyaratan?.tuntas_fa &&
+  //   data?.persyaratan?.bebas_kamtib;
 
   const editDrop = ['sysadmin', 'admin', 'wilayah', 'daerah'];
   const isEditDrop = editDrop.includes(user?.role);
@@ -50,9 +51,9 @@ const PenumpangDetail = ({route, navigation}) => {
     setLoading(true);
     const token = JSON.parse(await AsyncStorage.getItem('token'));
     try {
-      const resp = await axios.get(`${apiUrl}/penumpang/${route.params.uuid}`, {
+      const resp = await axios.get(`${apiUrl}/santri/${route.params.uuid}`, {
         headers: {
-          'x-auth-token': token,
+          'X-Auth': token,
         },
       });
       setData(resp.data.data);
@@ -76,14 +77,14 @@ const PenumpangDetail = ({route, navigation}) => {
       <HeaderPage
         title="Detail Penumpang"
         navigation={navigation}
-        link="PenumpangList"
+        link="Dashboard"
       />
       {loading ? (
         <Spinner color={'lime.900'} size={'lg'} mt={2} />
       ) : (
         <ScrollView>
           <Box>
-            <ImageDetail niup={data?.santri?.niup} />
+            <ImageDetail niup={data?.niup} />
             <Box p={4} mb={3} shadow={'3'} backgroundColor={'white'}>
               <Text color={'lime.900'} fontWeight={'bold'} fontSize={'lg'}>
                 BIODATA
@@ -93,16 +94,14 @@ const PenumpangDetail = ({route, navigation}) => {
                 <Text fontSize={'md'} w={24} color={'muted.500'}>
                   Nama
                 </Text>
-                <Text fontSize={'md'}>{data?.santri?.nama_lengkap}</Text>
+                <Text fontSize={'md'}>{data?.nama_lengkap}</Text>
               </HStack>
               <HStack my={2}>
                 <Text fontSize={'md'} w={24} color={'muted.500'}>
                   Jenis Kelamin
                 </Text>
                 <Text fontSize={'md'}>
-                  {data?.santri?.jenis_kelamin === 'L'
-                    ? 'Laki-laki'
-                    : 'Perempuan'}
+                  {data?.jenis_kelamin === 'L' ? 'Laki-laki' : 'Perempuan'}
                 </Text>
               </HStack>
               <HStack my={2}>
@@ -112,48 +111,102 @@ const PenumpangDetail = ({route, navigation}) => {
                 <Text
                   fontSize={
                     'md'
-                  }>{`${data?.santri?.raw?.tempat_lahir}, ${data?.santri?.raw?.tanggal_lahir}`}</Text>
+                  }>{`${data?.raw?.tempat_lahir}, ${data?.raw?.tanggal_lahir}`}</Text>
               </HStack>
               <HStack my={2}>
                 <Text fontSize={'md'} w={24} color={'muted.500'}>
                   Kecamatan
                 </Text>
-                <Text fontSize={'md'}>{data?.santri?.raw?.kecamatan}</Text>
+                <Text fontSize={'md'}>{data?.raw?.kecamatan}</Text>
               </HStack>
               <HStack my={2}>
                 <Text fontSize={'md'} w={24} color={'muted.500'}>
                   Kabupaten
                 </Text>
-                <Text fontSize={'md'}>{data?.santri?.raw?.kabupaten}</Text>
+                <Text fontSize={'md'}>{data?.raw?.kabupaten}</Text>
               </HStack>
               <HStack my={2}>
                 <Text fontSize={'md'} w={24} color={'muted.500'}>
                   Kota
                 </Text>
-                <Text fontSize={'md'}>{data?.santri?.raw?.provinsi}</Text>
+                <Text fontSize={'md'}>{data?.raw?.provinsi}</Text>
               </HStack>
-              <Badge colorScheme={isLayak ? 'success' : 'danger'} mt={4}>
+              {/* <Badge colorScheme={isLayak ? 'success' : 'danger'} mt={4}>
                 <Text>{!isLayak && <Text>BELUM </Text>}BERHAK PULANG</Text>
-              </Badge>
+              </Badge> */}
             </Box>
             <Box p={4} my={4} shadow={'3'} backgroundColor={'white'}>
-              <Text fontSize={'md'}>NIUP : {data?.santri?.niup}</Text>
+              <Text fontSize={'md'}>NIUP : {data?.niup}</Text>
+            </Box>
+            <Box p={4} my={4} shadow={'3'} backgroundColor={'white'}>
+              <Text color={'lime.900'} fontWeight={'bold'} fontSize={'lg'}>
+                PERSYARATAN
+              </Text>
+              <Divider mb={2} />
+              {data?.persyaratan?.map((sp, index) => (
+                <Box key={index}>
+                  <Text fontSize={'md'} fontWeight={'bold'}>
+                    {sp?.ketuntasan.nama} ({sp?.ketuntasan.alias})
+                  </Text>
+                  <Text fontSize={'md'}>
+                    {sp.ketuntasan?.penjab.toUpperCase()}
+                  </Text>
+                  <Badge
+                    colorScheme={sp.status ? 'success' : 'danger'}
+                    mb={2}
+                    mt={2}>
+                    <Text>
+                      {sp.status ? (
+                        <Text>{sp.ketuntasan.statusTrue.toUpperCase()}</Text>
+                      ) : (
+                        <Text>{sp.ketuntasan.statusFalse.toUpperCase()}</Text>
+                      )}
+                    </Text>
+                  </Badge>
+                </Box>
+              ))}
+            </Box>
+            <Box p={4} my={4} shadow={'3'} backgroundColor={'white'}>
+              <Text color={'lime.900'} fontWeight={'bold'} fontSize={'lg'}>
+                PEMBAYARAN
+              </Text>
+              <Divider mb={2} />
+              <Text fontSize={'md'} fontWeight={'bold'}>
+                {`Rp. ${data?.penumpang?.dropspot?.harga}`}
+              </Text>
+              <Text
+                fontSize={'md'}>{`Rp. ${data?.penumpang?.totalBayar}`}</Text>
+              <Badge
+                colorScheme={
+                  data.penumpang?.statusPembayaran === 'lunas'
+                    ? 'success'
+                    : data.penumpang?.statusPembayaran === 'kurang'
+                    ? 'warning'
+                    : data.penumpang?.statusPembayaran === 'lebih'
+                    ? 'info'
+                    : 'danger'
+                }
+                w={48}
+                mt={1}
+                mb={2}>
+                {data?.penumpang?.statusPembayaran?.toUpperCase()}
+              </Badge>
             </Box>
             <Box p={4} my={4} shadow={'3'} backgroundColor={'white'}>
               <Text color={'lime.900'} fontWeight={'bold'} fontSize={'lg'}>
                 DOMISILI SANTRI
               </Text>
               <Divider mb={2} />
-              {data?.santri?.raw?.domisili_santri && (
+              {data?.raw?.domisili_santri && (
                 <Box>
                   <Text fontSize={'md'} fontWeight={'bold'}>
-                    {data?.santri?.wilayah}
+                    {data?.wilayah}
                   </Text>
-                  <Text fontSize={'md'}>{data?.santri?.blok}</Text>
+                  <Text fontSize={'md'}>{data?.blok}</Text>
                   <Text fontSize={'md'}>
                     {
-                      data?.santri?.raw?.domisili_santri[
-                        data?.santri?.raw?.domisili_santri?.length - 1
+                      data?.raw?.domisili_santri[
+                        data?.raw?.domisili_santri?.length - 1
                       ]?.kamar
                     }
                   </Text>
@@ -165,20 +218,18 @@ const PenumpangDetail = ({route, navigation}) => {
                 PENDIDIKAN
               </Text>
               <Divider mb={2} />
-              {data?.santri?.raw?.pendidikan && (
+              {data?.raw?.pendidikan && (
                 <Box>
                   <Text fontSize={'md'} fontWeight={'bold'}>
                     {
-                      data?.santri?.raw?.pendidikan[
-                        data?.santri?.raw?.pendidikan?.length - 1
-                      ]?.lembaga
+                      data?.raw?.pendidikan[data?.raw?.pendidikan?.length - 1]
+                        ?.lembaga
                     }
                   </Text>
                   <Text fontSize={'md'}>
                     {
-                      data?.santri?.raw?.pendidikan[
-                        data?.santri?.raw?.pendidikan?.length - 1
-                      ]?.jurusan
+                      data?.raw?.pendidikan[data?.raw?.pendidikan?.length - 1]
+                        ?.jurusan
                     }
                   </Text>
                 </Box>
@@ -189,14 +240,14 @@ const PenumpangDetail = ({route, navigation}) => {
                 <Text color={'lime.900'} fontWeight={'bold'} fontSize={'lg'}>
                   TUJUAN PULANG
                 </Text>
-                {isEditDrop && (
+                {/* {isEditDrop && (
                   <Pressable
                     onPress={() =>
                       navigation.navigate({
                         name: 'UbahDropspot',
                         params: {
                           uuid: data?.santri_uuid,
-                          niup: data?.santri?.niup,
+                          niup: data?.niup,
                           id: data?.id,
                           drop: data?.dropspot,
                         },
@@ -204,44 +255,21 @@ const PenumpangDetail = ({route, navigation}) => {
                     }>
                     <Icon name="edit" size={16} color={'#365314'} />
                   </Pressable>
-                )}
+                )} */}
               </HStack>
               <Divider mb={2} />
               <Text fontSize={'md'} fontWeight={'bold'}>
-                {data?.dropspot?.nama}
+                {data?.penumpang?.dropspot?.namaDropspot}
               </Text>
-              <Text fontSize={'md'}>{data?.dropspot?.area?.nama}</Text>
+              <Text fontSize={'md'}>
+                {data?.penumpang?.dropspot?.area?.namaArea}
+              </Text>
               <Text
                 fontSize={
                   'md'
-                }>{`${data?.dropspot?.area?.pic} | ${data?.dropspot?.area?.no_hp}`}</Text>
+                }>{`${data?.penumpang?.dropspot?.area?.picInt} | ${data?.penumpang?.dropspot?.area?.hpPicInt}`}</Text>
             </Box>
-            <Box p={4} my={4} shadow={'3'} backgroundColor={'white'}>
-              <Text color={'lime.900'} fontWeight={'bold'} fontSize={'lg'}>
-                PEMBAYARAN
-              </Text>
-              <Divider mb={2} />
-              <Text fontSize={'md'} fontWeight={'bold'}>
-                {`Rp. ${data?.dropspot?.harga}`}
-              </Text>
-              <Text fontSize={'md'}>{`Rp. ${data?.jumlah_bayar}`}</Text>
-              <Badge
-                colorScheme={
-                  data.status_bayar === 'lunas'
-                    ? 'success'
-                    : data.status_bayar === 'kurang'
-                    ? 'warning'
-                    : data.status_bayar === 'lebih'
-                    ? 'info'
-                    : 'danger'
-                }
-                w={48}
-                mt={1}
-                mb={2}>
-                {data?.status_bayar?.toUpperCase()}
-              </Badge>
-            </Box>
-            <Box p={4} my={4} shadow={'3'} backgroundColor={'white'}>
+            {/* <Box p={4} my={4} shadow={'3'} backgroundColor={'white'}>
               <HStack justifyContent={'space-between'} alignItems={'center'}>
                 <Text color={'lime.900'} fontWeight={'bold'} fontSize={'lg'}>
                   PERSYARATAN
@@ -253,7 +281,7 @@ const PenumpangDetail = ({route, navigation}) => {
                         name: 'UbahPersyaratan',
                         params: {
                           uuid: data?.santri_uuid,
-                          niup: data?.santri?.niup,
+                          niup: data?.niup,
                           user: user,
                           id: data?.id,
                           bps: data?.persyaratan?.lunas_bps,
@@ -316,13 +344,13 @@ const PenumpangDetail = ({route, navigation}) => {
                 mb={2}>
                 {data?.persyaratan?.bebas_kamtib ? 'BEBAS' : 'BELUM BEBAS'}
               </Badge>
-            </Box>
+            </Box> */}
             <Box p={4} my={4} shadow={'3'} backgroundColor={'white'}>
               <Text color={'lime.900'} fontWeight={'bold'} fontSize={'lg'}>
                 KELUARGA
               </Text>
               <Divider mb={2} />
-              {data?.santri?.raw?.keluarga?.map(k => {
+              {data?.raw?.keluarga?.map(k => {
                 return (
                   <Box my={2} key={k.id}>
                     <Text fontSize={'md'} fontWeight={'bold'} key={k.id}>
